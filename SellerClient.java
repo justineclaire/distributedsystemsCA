@@ -170,6 +170,7 @@ public class SellerClient implements Runnable
 		  System.out.println("Error closing ...");
 
       }
+      System.exit(0);
       thread = null;
    }
 

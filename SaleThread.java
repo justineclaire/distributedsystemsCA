@@ -38,6 +38,8 @@ public class SaleThread extends Thread {
     public synchronized void run() {
         while (thread != null){
             try {
+                //read in offer from buyer
+                
                 String offer = streamIn.readUTF();
                 //get ID of buyer
                 int num = offer.indexOf(":");
@@ -47,7 +49,7 @@ public class SaleThread extends Thread {
                 int quantity = Integer.parseInt(offer.substring(offer.length()-1));
                 if(offer.contains("offer")){
                     salesman.messageFromSale(ID, index-1, quantity);
-                    
+
                 }
                 
             } catch (Exception e) {

@@ -116,12 +116,15 @@ public class BuyerClient implements Runnable
 		  System.out.println("Error closing ...");
 
       }
+      System.exit(0);
       thread = null;
    }
 
 
    public void Buy() {
       purchaseInProg = 1;
+
+      //get user input for what they want to buy
       Scanner scan = new Scanner(System.in);
       String quantity = null;
       String item = null;
@@ -142,6 +145,7 @@ public class BuyerClient implements Runnable
           }
       } while (!(quantity.matches("-?\\d+(\\.\\d+)?")));
       
+      //broadcast the offer to the server
       String message = item + quantity;
       try {
          streamOut.writeUTF("offer"+message);
@@ -151,26 +155,23 @@ public class BuyerClient implements Runnable
          stop();
       }
 
+      //wait to check purchase was successful
       try {
          int rep = 0;
-         while(rep == 0){
+         while (rep == 0) {
             System.out.println("waiting for RESPONSE...");
             String response = streamIn.readUTF();
             System.out.println(response);
-            if(response.contains("success")){
-               System.out.println("succes boys");
-               rep = 7;
-               break;
-            }else if(response.contains("fail")){
-               System.out.println("we failed");
-               rep= 7;
-               break;
-            }
+            rep = 7;
+            break;
+            
          }
-      } catch (Exception e) {
+     } catch (Exception e) {
          // TODO: handle exception
-      }
-      purchaseInProg = 0;
+     } finally {
+         // Reset purchaseInProg to 0 after completing the purchase
+         purchaseInProg = 0;
+     }
  }
 
    public static void main(String args[])
